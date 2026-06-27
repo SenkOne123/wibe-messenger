@@ -32,6 +32,9 @@ export const initSocket = (server: Server) => {
 
   io.on('connection', (socket) => {
     const userId = socket.data.user.userId;
+
+    console.log(`[Socket] Joined room: "${userId}" (Type: ${typeof userId})`);
+
     // Join a room named after the user's ID
     socket.join(userId);
 

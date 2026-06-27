@@ -20,7 +20,8 @@ export class SocketService {
 
     this.socket = io('/', {
       auth: { token },
-      withCredentials: true
+      withCredentials: true,
+      transports: ['websocket']
     });
 
     this.socket.on('connect', () => {
@@ -28,7 +29,6 @@ export class SocketService {
     });
 
     this.socket.on('newMessage', (message) => {
-      console.log('new message', message);
       this.ngZone.run(() => {
         this.onNewMessage.next(message);
       });

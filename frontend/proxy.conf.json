@@ -1,6 +1,12 @@
 {
   "/api": {
-    "target": "http://sample-sub-target.twilightparadox.com/",
+    "target": "http://localhost:3000",
     "secure": false
+  },
+  "/socket.io": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "ws": true,
+    "changeOrigin": true
   }
 }
