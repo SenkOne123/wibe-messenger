@@ -9,7 +9,7 @@ let io: SocketIOServer;
 export const initSocket = (server: Server) => {
   io = new SocketIOServer(server, {
     cors: {
-      origin: 'http://localhost:4200',
+      origin: true,
       methods: ['GET', 'POST'],
       credentials: true,
     },

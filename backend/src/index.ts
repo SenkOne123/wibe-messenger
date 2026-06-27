@@ -16,7 +16,7 @@ initSocket(server);
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
