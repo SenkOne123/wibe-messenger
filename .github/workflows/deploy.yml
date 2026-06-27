@@ -15,9 +15,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22 # Укажи свой порт, если он нестандартный
           script: |
             cd /var/www/wibe-messenger
-            # Make sure script is executable
+            # Убедись, что права на запуск есть
             chmod +x deploy.sh
-            # Execute deployment script
+            # Запуск скрипта деплоя
             ./deploy.sh
