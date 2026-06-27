@@ -18,8 +18,8 @@ interface Tokens {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3000/api/auth';
-  
+  private readonly API_URL = '/api/auth';
+
   currentUser = signal<User | null>(null);
 
   constructor(private http: HttpClient, private router: Router) {
@@ -78,7 +78,7 @@ export class AuthService {
         error: () => {} // Ignore errors on logout
       });
     }
-    
+
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     this.currentUser.set(null);
