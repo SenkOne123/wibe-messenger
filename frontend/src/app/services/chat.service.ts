@@ -64,22 +64,23 @@ export class ChatService {
   appendMessage(msg: Message) {
     const activeConv = this.activeConversation();
     if (activeConv && activeConv.id === msg.conversationId) {
-      // Append to active messages
-      this.activeMessages.update(msgs => [...msgs, msg]);
+      // Append to active messages if not already present
+      this.activeMessages.update(msgs => {
+        if (msgs.some(m => m.id === msg.id)) return msgs;
+        return [...msgs, msg];
+      });
     }
 
     // Also update the conversation list snippet
     this.conversations.update(convs => {
       const idx = convs.findIndex(c => c.id === msg.conversationId);
       if (idx !== -1) {
-        const c = convs[idx];
-        c.messages = [msg];
-        c.updatedAt = msg.createdAt;
-        // Move to top
-        convs.splice(idx, 1);
-        return [c, ...convs];
+        const c = { ...convs[idx], messages: [msg], updatedAt: msg.createdAt };
+        const newConvs = [...convs];
+        newConvs.splice(idx, 1);
+        return [c, ...newConvs];
       }
-      return convs; // optionally reload if not found
+      return convs;
     });
   }
 
