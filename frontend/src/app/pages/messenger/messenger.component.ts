@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ChatService, Conversation } from '../../services/chat.service';
@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { UserSearchDialogComponent } from './user-search-dialog/user-search-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-messenger',
@@ -25,34 +26,32 @@ import { UserSearchDialogComponent } from './user-search-dialog/user-search-dial
 })
 export class MessengerComponent implements OnInit, OnDestroy {
   newMessageText = '';
+  private messageSub?: Subscription;
 
   constructor(
     public authService: AuthService,
     public chatService: ChatService,
     private socketService: SocketService,
     private dialog: MatDialog
-  ) {
-    // Listen for new messages from Socket
-    effect(() => {
-      const msg = this.socketService.newMessageSignal();
-      if (msg) {
-        this.chatService.appendMessage(msg);
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.socketService.connect();
     this.chatService.loadConversations().subscribe();
+    this.messageSub = this.socketService.onNewMessage.subscribe(msg => {
+      this.chatService.appendMessage(msg);
+    });
   }
 
   ngOnDestroy() {
     this.socketService.disconnect();
+    this.messageSub?.unsubscribe();
   }
 
   logout() {
     this.authService.logout();
     this.socketService.disconnect();
+    this.chatService.clear();
   }
 
   openUserSearch() {

@@ -82,4 +82,10 @@ export class ChatService {
       return convs; // optionally reload if not found
     });
   }
+
+  clear() {
+    this.conversations.set([]);
+    this.activeConversation.set(null);
+    this.activeMessages.set([]);
+  }
 }

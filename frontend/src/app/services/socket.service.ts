@@ -1,13 +1,14 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
   private socket: Socket | null = null;
-  public newMessageSignal = signal<any>(null);
+  public onNewMessage = new Subject<any>();
 
   constructor(private authService: AuthService) {
     // Listen to token changes or initialization
@@ -17,7 +18,7 @@ export class SocketService {
     const token = this.authService.getAccessToken();
     if (!token || this.socket) return;
 
-    this.socket = io('/', {
+    this.socket = io('http://localhost:3000', {
       auth: { token },
       withCredentials: true
     });
@@ -27,7 +28,7 @@ export class SocketService {
     });
 
     this.socket.on('newMessage', (message) => {
-      this.newMessageSignal.set(message);
+      this.onNewMessage.next(message);
     });
 
     this.socket.on('disconnect', () => {

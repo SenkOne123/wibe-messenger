@@ -3,19 +3,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const searchUsers = async (query: string, excludeUserId: string) => {
-  return prisma.user.findMany({
-    where: {
-      username: {
-        contains: query,
-      },
-      id: {
-        not: excludeUserId,
-      },
-    },
+  const users = await prisma.user.findMany({
     select: {
       id: true,
       username: true,
     },
-    take: 20,
   });
+  
+  const lowerQuery = query.toLowerCase();
+  return users
+    .filter(u => u.id !== excludeUserId && u.username.toLowerCase().includes(lowerQuery))
+    .slice(0, 20);
 };
