@@ -1,0 +1,70 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <span>Wibe Messenger</span>
+  <span class="spacer"></span>
+  <span class="user-greeting">Welcome, {{ authService.currentUser()?.username }}</span>
+  <button mat-button (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<div class="messenger-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <button mat-raised-button color="accent" class="full-width" (click)="openUserSearch()">
+        <mat-icon>add</mat-icon> New Chat
+      </button>
+    </div>
+    
+    <mat-list class="chat-list">
+      <mat-list-item 
+        *ngFor="let conv of chatService.conversations()" 
+        (click)="selectConversation(conv)"
+        [class.active]="chatService.activeConversation()?.id === conv.id"
+        class="chat-list-item">
+        <span matListItemTitle>{{ getOtherUser(conv) }}</span>
+        <span matListItemLine class="last-message">
+          {{ conv.messages?.[0]?.text || 'No messages yet' }}
+        </span>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window">
+    <ng-container *ngIf="chatService.activeConversation() as activeConv; else noChatSelected">
+      <div class="chat-header">
+        <h2>{{ getOtherUser(activeConv) }}</h2>
+      </div>
+      
+      <div class="messages-area">
+        <div 
+          *ngFor="let msg of chatService.activeMessages()" 
+          class="message-bubble"
+          [class.my-message]="msg.senderId === authService.currentUser()?.id"
+        >
+          <div class="message-text">{{ msg.text }}</div>
+          <div class="message-time">{{ msg.createdAt | date:'shortTime' }}</div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <mat-form-field appearance="outline" class="full-width message-input">
+          <input 
+            matInput 
+            placeholder="Type a message..." 
+            [(ngModel)]="newMessageText" 
+            (keyup.enter)="sendMessage()"
+          />
+        </mat-form-field>
+        <button mat-fab color="primary" (click)="sendMessage()" [disabled]="!newMessageText.trim()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #noChatSelected>
+      <div class="no-chat-container">
+        <h3>Select a chat or start a new one to begin messaging</h3>
+      </div>
+    </ng-template>
+  </div>
+</div>
