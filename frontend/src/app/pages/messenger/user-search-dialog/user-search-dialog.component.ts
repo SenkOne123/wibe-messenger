@@ -13,25 +13,25 @@ import { ChatService } from '../../../services/chat.service';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule, FormsModule],
   template: `
-    <h2 mat-dialog-title>Find User</h2>
+    <h2 mat-dialog-title>Поиск пользователя</h2>
     <mat-dialog-content>
       <mat-form-field appearance="fill" style="width: 100%;">
-        <mat-label>Username</mat-label>
+        <mat-label>Имя пользователя</mat-label>
         <input matInput [(ngModel)]="searchQuery" (keyup.enter)="search()" />
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="search()">Search</button>
+      <button mat-raised-button color="primary" (click)="search()">Найти</button>
 
       <mat-list>
         <mat-list-item *ngFor="let user of searchResults" (click)="selectUser(user)" style="cursor: pointer;">
           <span matListItemTitle>{{ user.username }}</span>
         </mat-list-item>
         <div *ngIf="searched && searchResults.length === 0" style="margin-top: 10px;">
-          No users found.
+          Пользователи не найдены.
         </div>
       </mat-list>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button mat-dialog-close>Отмена</button>
     </mat-dialog-actions>
   `,
   styles: []

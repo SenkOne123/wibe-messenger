@@ -1,8 +1,8 @@
 <mat-toolbar color="primary" class="app-toolbar">
   <span>Wibe Messenger</span>
   <span class="spacer"></span>
-  <span class="user-greeting">Welcome, {{ authService.currentUser()?.username }}</span>
-  <button mat-button (click)="logout()">Logout</button>
+  <span class="user-greeting">Привет, {{ authService.currentUser()?.username }}</span>
+  <button mat-button (click)="logout()">Выйти</button>
 </mat-toolbar>
 
 <div class="messenger-container">
@@ -10,7 +10,7 @@
   <div class="sidebar">
     <div class="sidebar-header">
       <button mat-raised-button color="accent" class="full-width" (click)="openUserSearch()">
-        <mat-icon>add</mat-icon> New Chat
+        <mat-icon>add</mat-icon> Новый чат
       </button>
     </div>
     
@@ -22,7 +22,7 @@
         class="chat-list-item">
         <span matListItemTitle>{{ getOtherUser(conv) }}</span>
         <span matListItemLine class="last-message">
-          {{ conv.messages?.[0]?.text || 'No messages yet' }}
+          {{ conv.messages?.[0]?.text || 'Нет сообщений' }}
         </span>
       </mat-list-item>
     </mat-list>
@@ -42,7 +42,7 @@
           [class.my-message]="msg.senderId === authService.currentUser()?.id"
         >
           <div class="message-text">{{ msg.text }}</div>
-          <div class="message-time">{{ msg.createdAt | date:'shortTime' }}</div>
+          <div class="message-time">{{ msg.createdAt | date:'HH:mm' }}</div>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
         <mat-form-field appearance="outline" class="full-width message-input">
           <input 
             matInput 
-            placeholder="Type a message..." 
+            placeholder="Напишите сообщение..." 
             [(ngModel)]="newMessageText" 
             (keyup.enter)="sendMessage()"
           />
@@ -63,7 +63,7 @@
 
     <ng-template #noChatSelected>
       <div class="no-chat-container">
-        <h3>Select a chat or start a new one to begin messaging</h3>
+        <h3>Выберите чат или начните новый</h3>
       </div>
     </ng-template>
   </div>
