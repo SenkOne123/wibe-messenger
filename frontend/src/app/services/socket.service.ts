@@ -17,7 +17,7 @@ export class SocketService {
     const token = this.authService.getAccessToken();
     if (!token || this.socket) return;
 
-    this.socket = io('http://localhost:3000', {
+    this.socket = io('/', {
       auth: { token },
       withCredentials: true
     });

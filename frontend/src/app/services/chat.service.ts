@@ -22,7 +22,7 @@ export interface Conversation {
   providedIn: 'root'
 })
 export class ChatService {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = '/api';
 
   conversations = signal<Conversation[]>([]);
   activeConversation = signal<Conversation | null>(null);
@@ -67,7 +67,7 @@ export class ChatService {
       // Append to active messages
       this.activeMessages.update(msgs => [...msgs, msg]);
     }
-    
+
     // Also update the conversation list snippet
     this.conversations.update(convs => {
       const idx = convs.findIndex(c => c.id === msg.conversationId);
